@@ -29,9 +29,6 @@ class hyperparam():
 		self.category=category #'train'/'test'
 
 	def printhyperparam(self):
-		# print("category: "+self.category,end=', ')
-		# print("name: "+self.name,end=', ')
-		# print("value: "+str(self.value))
 		print(self.category,end=', ')
 		print(self.name,end=', ')
 		print(str(self.value))
@@ -233,11 +230,7 @@ if __name__=="__main__":
 		                          ('test' ,'d',[255]),
 		                          ('train','q',[55,66])]
 		                        )
-	# mycollection.addtocollection([('train','a',[9,10]),
-	# 	                          ('test', 'b',[8,11]),
-	# 	                          ('test', 'c',[7,8]),
-	# 	                          ('test', 'd',[15])]
-	# 	                        )
+
 
 	tids=mycollection.getsets_isolateddiffsets(
 		difftuple=('train','a'),
