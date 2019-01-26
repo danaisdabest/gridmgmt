@@ -1,0 +1,60 @@
+FROM ubuntu:16.04 
+RUN apt-get update -y && apt-get upgrade --yes && \
+	apt-get install --yes --no-install-suggests \
+	    # install essentials
+    build-essential \
+    g++ \
+    gcc \
+    git \
+    tmux \
+    awscli \
+    wget \
+    vim \
+    openssh-client \
+    # install python 3
+    python3 \
+    python3-dev \
+    python3-pip \
+    python3-setuptools \
+    python3-virtualenv \
+    python3-wheel \
+    pkg-config \
+    # requirements for numpy
+    libopenblas-base \
+    python3-numpy \
+    python3-scipy \
+    # requirements for keras
+    python3-h5py \
+    python3-yaml \
+    python3-pydot \
+    # requirements for mozjpeg
+    autoconf automake cmake libpng12-dev libtool make nasm pkg-config \ 
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+
+
+
+####### Build TensorFlow and Keras
+ARG TENSORFLOW_VERSION=1.3.0
+ARG TENSORFLOW_DEVICE=cpu
+ARG TENSORFLOW_APPEND=
+RUN pip3 --no-cache-dir install https://storage.googleapis.com/tensorflow/linux/${TENSORFLOW_DEVICE}/tensorflow${TENSORFLOW_APPEND}-${TENSORFLOW_VERSION}-cp35-cp35m-linux_x86_64.whl
+
+ARG KERAS_VERSION=2.0.8
+ENV KERAS_BACKEND=tensorflow
+RUN pip3 --no-cache-dir install --no-dependencies git+https://github.com/fchollet/keras.git@${KERAS_VERSION}
+
+# quick test and dump package lists
+RUN python3 -c "import tensorflow; print(tensorflow.__version__)" \
+ && dpkg-query -l > /dpkg-query-l.txt \
+ && pip3 freeze > /pip3-freeze.txt
+
+
+######## Build afl-fuzz
+########ADD http://lcamtuf.coredump.cx/afl/releases/afl-2.52b.tgz /root/ <- NO, use our own .tgz version of AFL so we don't rely on lcamtuf 
+WORKDIR /root
+COPY afl_versions/afl-2.52b /root/afl-2.52b 
+WORKDIR /root/afl-2.52b
+COPY afl_versions/afl-fuzz.c /root/afl-2.52b/ 
+RUN make && make install
+
