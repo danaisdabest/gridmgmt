@@ -1,16 +1,11 @@
 help:
 	@cat Makefile
 
-DATA?="${HOME}/Data"
 GPU?=0
-#IMAGE_NAME=${1}
-#BASE_IMAGE_NAME=kerasafl
 DOCKER=GPU=$(GPU) docker
 BACKEND=tensorflow
-CUDA_VERSION?=8.0
-CUDNN_VERSION?=6
-SRC?=$(CURDIR)
 BASE_IMAGE_NAME="kerasafl"
+SRC?=$(CURDIR)
 
 dockerbuild:   
 	#-t option?
