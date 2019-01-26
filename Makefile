@@ -18,5 +18,5 @@ dockerbuild:
 	$(DOCKER) build -t $(IMAGE_NAME) -f Dockerfiles/Dockerfile_$(IMAGE_NAME) $(SRC)    
 
 dockerbash: dockerbuild
-	$(DOCKER) run --privileged -it -v $(SRC):/src/workspace/ --env KERAS_BACKEND=$(BACKEND) $(IMAGE_NAME) /bin/sh -c "$(RUNCOMMAND)"
+	$(DOCKER) run --privileged -it -v $(SRC):/src/workspace/ KERAS_BACKEND=$(BACKEND) $(IMAGE_NAME) /bin/sh -c "$(RUNCOMMAND)"
 
