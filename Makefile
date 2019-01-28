@@ -2,8 +2,8 @@ help:
 	@cat Makefile
 
 GPU?=0
-DOCKER=GPU=$(GPU) docker
 BACKEND=tensorflow
+DOCKER=KERAS_BACKEND=$(BACKEND) GPU=$(GPU) docker
 BASE_IMAGE_NAME="kerasafl"
 SRC?=$(CURDIR)
 
@@ -13,5 +13,6 @@ dockerbuild:
 	$(DOCKER) build -t $(IMAGE_NAME) -f Dockerfiles/Dockerfile_$(IMAGE_NAME) $(SRC)    
 
 dockerbash: dockerbuild
-	$(DOCKER) run --privileged -it -v $(SRC):/src/workspace/ KERAS_BACKEND=$(BACKEND) $(IMAGE_NAME) /bin/sh -c "$(RUNCOMMAND)"
+	# $(DOCKER) run --privileged -it -v $(SRC):/src/workspace/ --env KERAS_BACKEND=$(BACKEND) $(IMAGE_NAME) -c "$(RUNCOMMAND)"
+	$(DOCKER) run --privileged -it -v $(SRC):/src/workspace/ $(IMAGE_NAME) /bin/sh -c "$(RUNCOMMAND)"
 
