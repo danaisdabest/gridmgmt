@@ -2,10 +2,6 @@
 
 HOMEDIR='/src/workspace'
 
-RCOMMAND=''
-OVERRIDEINDIR='None'
-SHUFFLEQUEUE='False'
-
 if [[ $(which docker) && $(docker --version) ]]; then
     echo "docker already installed"
 
